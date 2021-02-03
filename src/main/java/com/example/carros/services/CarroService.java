@@ -1,7 +1,7 @@
 package com.example.carros.services;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.carros.entidades.Carro;
 import com.example.carros.entidades.CarroRepository;
@@ -27,6 +27,10 @@ public class CarroService {
 		carros.add(new Carro("Sandero", 2l));
 		carros.add(new Carro("Onix", 3l));
 		return carros;
+	}
+
+	public Optional<Carro> getCarroById(long id) {
+		return carroRep.findById(id);
 	}
 
 }
