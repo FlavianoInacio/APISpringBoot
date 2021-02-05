@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.carros.dto.CarroDTO;
 import com.example.carros.entidades.Carro;
 import com.example.carros.entidades.CarroRepository;
 
@@ -16,21 +17,59 @@ public class CarroService {
 	CarroRepository carroRep;
 	
 	
-	public Iterable<Carro> getCarro() {
-		return carroRep.findAll();
+   public Iterable<CarroDTO> getCarro() {
+		List<Carro> carros = carroRep.findAll();
+		return carrosToCarrosDTO(carros);
+
 	}
+   
+   private List<CarroDTO> carrosToCarrosDTO(List<Carro> carros){
+		List<CarroDTO> carrosDTO = new ArrayList<>();
+		for(Carro c: carros) {
+			carrosDTO.add(new CarroDTO(c));
+		}
+		return carrosDTO;
+   }
 	
 	public List<Carro> getCarrosFake() {
 		 List<Carro> carros = new ArrayList<Carro>();
-
-		carros.add(new Carro("Fusca", 1l));
-		carros.add(new Carro("Sandero", 2l));
-		carros.add(new Carro("Onix", 3l));
 		return carros;
 	}
 
 	public Optional<Carro> getCarroById(long id) {
 		return carroRep.findById(id);
+	}
+
+	public List<CarroDTO> getCarroByTipo(String tipo) {
+		List<Carro> carros = carroRep.findByTipo(tipo);
+		return carrosToCarrosDTO(carros);
+	}
+
+	public Carro save(Carro carro) {
+		return carroRep.save(carro);
+		
+	}
+
+	public String put(long id, Carro carro) {
+			Optional<Carro> optional = carroRep.findById(id);
+			if(optional.isPresent()) {
+				Carro db = optional.get();
+				db.setNome(carro.getNome());
+				db.setTipo(carro.getTipo());
+				carroRep.save(db);
+				return "Carro salvo com Sucesso";
+			}
+			else {
+				return "Não existe carro com esse id";
+			}
+		
+	}
+
+	public void delete(Long id) {
+		Optional<Carro> carro = carroRep.findById(id);
+		if(carro.isPresent()) {
+			carroRep.deleteById(id);
+		}
 	}
 
 }
