@@ -26,7 +26,7 @@ public class CarroService {
    private List<CarroDTO> carrosToCarrosDTO(List<Carro> carros){
 		List<CarroDTO> carrosDTO = new ArrayList<>();
 		for(Carro c: carros) {
-			carrosDTO.add(new CarroDTO(c));
+			carrosDTO.add(CarroDTO.create(c));
 		}
 		return carrosDTO;
    }
@@ -36,8 +36,14 @@ public class CarroService {
 		return carros;
 	}
 
-	public Optional<Carro> getCarroById(long id) {
-		return carroRep.findById(id);
+	public Optional<CarroDTO> getCarroById(long id) {
+		Optional<Carro> carro = carroRep.findById(id);
+		if(carro.isPresent()) {
+			return Optional.of(CarroDTO.create(carro.get()));
+		}
+		else {
+			return null;
+		}
 	}
 
 	public List<CarroDTO> getCarroByTipo(String tipo) {

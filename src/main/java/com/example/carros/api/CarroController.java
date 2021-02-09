@@ -32,8 +32,8 @@ public class CarroController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity getById(@PathVariable("id") long  id){
-		Optional<Carro> carro = services.getCarroById(id);
-		if(carro.isPresent()) {
+		Optional<CarroDTO> carro = services.getCarroById(id);
+		if(carro != null && carro.isPresent()) {
 			return ResponseEntity.ok(carro);
 		}
 		else {
