@@ -51,30 +51,35 @@ public class CarroService {
 		return carrosToCarrosDTO(carros);
 	}
 
-	public Carro save(Carro carro) {
-		return carroRep.save(carro);
+	public CarroDTO save(Carro carro) {
+		Carro carroresponse = carroRep.save(carro);
+		return CarroDTO.create(carroresponse);
 		
 	}
 
-	public String put(long id, Carro carro) {
+	public CarroDTO put(long id, Carro carro) {
 			Optional<Carro> optional = carroRep.findById(id);
 			if(optional.isPresent()) {
 				Carro db = optional.get();
 				db.setNome(carro.getNome());
 				db.setTipo(carro.getTipo());
 				carroRep.save(db);
-				return "Carro salvo com Sucesso";
+				return CarroDTO.create(db);
 			}
 			else {
-				return "Não existe carro com esse id";
+				return null;
 			}
 		
 	}
 
-	public void delete(Long id) {
+	public boolean delete(Long id) {
 		Optional<Carro> carro = carroRep.findById(id);
 		if(carro.isPresent()) {
 			carroRep.deleteById(id);
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 

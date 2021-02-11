@@ -1,5 +1,6 @@
 package com.example.carros.api;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1/carros")
@@ -50,20 +52,33 @@ public class CarroController {
 	}
 	
 	@PostMapping
-	public String post(@RequestBody Carro carro) {
-		Carro carroSalvo = services.save(carro);
-		return "Carro salvo com sucesso! id = " + carroSalvo.getId();
+	public ResponseEntity post(@RequestBody Carro carro) {
+		try {
+			CarroDTO carroSalvo = services.save(carro);
+			URI location = getUri(carroSalvo.getId()); 
+			return ResponseEntity.created(location).build();
+			
+		}catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	private URI getUri(Long id) {
+		return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(id).toUri();
 	}
 	
 	@PutMapping("/{id}")
-	public String put(@PathVariable("id") long id, @RequestBody Carro carro) {
-		String response = services.put(id,carro);
-		return response;
+	public ResponseEntity put(@PathVariable("id") long id, @RequestBody Carro carro) {
+		CarroDTO carroupdate = services.put(id,carro);
+		return carroupdate!=null? ResponseEntity.ok(carroupdate):
+			ResponseEntity.notFound().build();
 	}
 	@DeleteMapping("/{id}")
-	public String delete(@PathVariable("id") Long id) {
-		services.delete(id);
-		return "Carro Deletado com sucesso!";
+	public ResponseEntity delete(@PathVariable("id") Long id) {
+		boolean retorno = services.delete(id);
+		return retorno==true?ResponseEntity.ok("Registro Deletado com sucesso!")
+				:ResponseEntity.notFound().build();
 		
 	}
 
