@@ -17,7 +17,7 @@ public class CarroService {
 	CarroRepository carroRep;
 	
 	
-   public Iterable<CarroDTO> getCarro() {
+   public List<CarroDTO> getCarro() {
 		List<Carro> carros = carroRep.findAll();
 		return carrosToCarrosDTO(carros);
 
