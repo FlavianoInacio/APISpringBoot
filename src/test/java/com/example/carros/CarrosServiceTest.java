@@ -13,7 +13,7 @@ import com.example.carros.entidades.Carro;
 import com.example.carros.services.CarroService;
 
 @SpringBootTest
-class CarrosApplicationTests {
+class CarrosServiceTest {
 	
 	@Autowired
 	CarroService services;

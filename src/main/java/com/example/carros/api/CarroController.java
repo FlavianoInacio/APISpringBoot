@@ -1,6 +1,7 @@
 package com.example.carros.api;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,10 +27,12 @@ public class CarroController {
 	
 	@Autowired
 	private CarroService services;
-	
+
 	@GetMapping
 	public ResponseEntity<Iterable<CarroDTO>> get() {
-		return ResponseEntity.ok(services.getCarro());
+		List<CarroDTO> carroDTOS = new ArrayList<CarroDTO>();
+		services.getCarro().forEach(carroDTOS::add);
+		return ResponseEntity.ok(carroDTOS);
 	}
 	
 	@GetMapping("/{id}")
