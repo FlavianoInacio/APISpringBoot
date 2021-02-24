@@ -7,6 +7,7 @@ import com.example.carros.dto.CarroDTO;
 import com.example.carros.entidades.Carro;
 import com.example.carros.entidades.CarroRepository;
 
+import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,7 @@ public class CarroService {
 	}
 
 	public CarroDTO save(Carro carro) {
+		Assert.state(carro.getId()==0);
 		Carro carroresponse = carroRep.save(carro);
 		return CarroDTO.create(carroresponse);
 		
@@ -72,15 +74,8 @@ public class CarroService {
 		
 	}
 
-	public boolean delete(Long id) {
-		Optional<Carro> carro = carroRep.findById(id);
-		if(carro.isPresent()) {
-			carroRep.deleteById(id);
-			return true;
-		}
-		else {
-			return false;
-		}
+	public void delete(Long id) {
+		carroRep.deleteById(id);
 	}
 
 }
