@@ -11,6 +11,7 @@ import com.example.carros.services.CarroService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,7 +54,8 @@ public class CarroController {
 				ResponseEntity.noContent().build():
 				ResponseEntity.ok(carros);
 	}
-	
+
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping
 	public ResponseEntity post(@RequestBody Carro carro) {
 		CarroDTO carroSalvo = services.save(carro);
@@ -65,13 +67,14 @@ public class CarroController {
 		return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(id).toUri();
 	}
-	
+	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/{id}")
 	public ResponseEntity put(@PathVariable("id") long id, @RequestBody Carro carro) {
 		CarroDTO carroupdate = services.put(id,carro);
 		return carroupdate!=null? ResponseEntity.ok(carroupdate):
 			ResponseEntity.notFound().build();
 	}
+	@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable("id") Long id) {
 		services.delete(id);

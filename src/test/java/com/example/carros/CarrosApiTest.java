@@ -26,10 +26,10 @@ public class CarrosApiTest {
     protected TestRestTemplate rest;
 
     private ResponseEntity<CarroDTO> getCarroById(String url){
-        return rest.getForEntity(url,CarroDTO.class);
+        return rest.withBasicAuth("user","123").getForEntity(url,CarroDTO.class);
     }
     private ResponseEntity<List<CarroDTO>> getCarros(String url){
-        return rest.exchange(
+        return rest.withBasicAuth("user","123").exchange(
                 url,
                 HttpMethod.GET,
                 null,
@@ -38,7 +38,7 @@ public class CarrosApiTest {
         );
     }
     private ResponseEntity put(String url, HttpEntity entity){
-        return  rest.exchange(
+        return  rest.withBasicAuth("admin","123").exchange(
                 url,
                 HttpMethod.PUT,
                 entity,
@@ -76,7 +76,7 @@ public class CarrosApiTest {
         carro.setNome("Teste");
         carro.setTipo("classicos");
         carro.setDescricao("Descrição Teste");
-        ResponseEntity response = rest.postForEntity("/api/v1/carros",carro,null);
+        ResponseEntity response = rest.withBasicAuth("admin","123").postForEntity("/api/v1/carros",carro,null);
         assertEquals(response.getStatusCode(), HttpStatus.CREATED);
         String location = response.getHeaders().get("location").get(0);
 
@@ -85,7 +85,7 @@ public class CarrosApiTest {
         assertEquals("Teste",carroDTO.getNome());
         assertEquals("classicos",carroDTO.getTipo());
 
-        rest.delete(location);
+        rest.withBasicAuth("admin","123").delete(location);
         assertEquals(HttpStatus.NOT_FOUND, getCarros(location).getStatusCode());
     }
     @Test
