@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CarrosApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UploadTest {
+public class UploadTest extends BaseAPITest{
     @Autowired
     private FirebaseService firebaseService;
 
@@ -40,8 +40,7 @@ public class UploadTest {
     @Test
     public void testUploadApi(){
         UploadInput uploadInput = getUploadInput();
-        ResponseEntity<UploadOutput> response = rest.withBasicAuth("user","123")
-                .postForEntity("/api/v1/upload", uploadInput, UploadOutput.class);
+        ResponseEntity<UploadOutput> response = post("/api/v1/upload", uploadInput, UploadOutput.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
