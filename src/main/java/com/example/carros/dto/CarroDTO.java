@@ -11,6 +11,8 @@ public class CarroDTO {
 	private long id;
 	private String nome;
 	private String tipo;
+	private String descricao;
+	private String url_foto;
 	
 	// ModelMapper converte uma classe em outra
 	public static CarroDTO create(Carro carro) {

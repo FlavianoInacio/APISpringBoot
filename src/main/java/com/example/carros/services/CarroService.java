@@ -65,6 +65,7 @@ public class CarroService {
 				Carro db = optional.get();
 				db.setNome(carro.getNome());
 				db.setTipo(carro.getTipo());
+				db.setDescricao(carro.getDescricao());
 				carroRep.save(db);
 				return CarroDTO.create(db);
 			}

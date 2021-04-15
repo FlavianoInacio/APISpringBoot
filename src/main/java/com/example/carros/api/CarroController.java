@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.example.carros.dto.CarroDTO;
 import com.example.carros.entidades.Carro;
+import com.example.carros.entidades.ResponseRetorno;
 import com.example.carros.services.CarroService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class CarroController {
 	public ResponseEntity post(@RequestBody Carro carro) {
 		CarroDTO carroSalvo = services.save(carro);
 		URI location = getUri(carroSalvo.getId());
-		return ResponseEntity.created(location).build();
+		return ResponseEntity.ok(carroSalvo);
 	}
 	
 	private URI getUri(Long id) {
@@ -78,8 +79,10 @@ public class CarroController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable("id") Long id) {
 		services.delete(id);
-		return ResponseEntity.ok("Registro Deletado com sucesso!");
-		
+		ResponseRetorno response = new ResponseRetorno();
+		response.setValor("Carro excluído com sucesso!");
+		return ResponseEntity.ok(response);
+
 	}
 
 }
